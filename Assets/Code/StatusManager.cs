@@ -6,14 +6,14 @@ using UnityEngine;
 public class StatusManager : MonoBehaviour
 {
     /// <summary>
-    /// 自分が食らう、相性によるダメージ倍率
+    /// 相手が食らう、相性によるダメージ倍率
     /// </summary>
     public struct CongenialityRate
     {
         public float fire;
-        public float water;
         public float wind;
         public float earth;
+        public float water;
     }
 
     /// <summary>
@@ -29,12 +29,13 @@ public class StatusManager : MonoBehaviour
         public float maxSP;  // 最大SP
         public int speed;   // 移動速度
         public float luck;  // 運（仮）
+        public Parameter.element element_defence; //防御の属性
     }
 
     /// <summary>
     /// 相性倍率 0 のデータ
     /// </summary>
-    static readonly CongenialityRate cong_zero = new() { fire = 0, water = 0, wind = 0, earth = 0 };
+    static readonly CongenialityRate cong_zero = new() { fire = 0, wind = 0, earth = 0, water = 0 };
     //--------------------------------
     //              セットアップ処理
     //--------------------------------
@@ -43,19 +44,19 @@ public class StatusManager : MonoBehaviour
 
     public static CongenialityRate CreateCongenialityRate
     (
-        float fire  = 1f,
-        float water = 1f,
-        float wind  = 1f,
-        float earth = 1f
+        float fire = 1f,
+        float wind = 1f,
+        float earth = 1f,
+        float water = 1f
     )
     {
         var newCongenialityRate = new CongenialityRate();
 
         // 各倍率を設定
-        newCongenialityRate.fire  = fire;
-        newCongenialityRate.water = water;
-        newCongenialityRate.wind  = wind;
-        newCongenialityRate.earth = earth;
+        newCongenialityRate.fire = fire;
+        newCongenialityRate.water = wind;
+        newCongenialityRate.wind = earth;
+        newCongenialityRate.earth = water;
 
         return newCongenialityRate;
 
@@ -73,6 +74,7 @@ public class StatusManager : MonoBehaviour
     /// <param name="maxSP">最大SP</param>
     /// <param name="speed">移動速度</param>
     /// <param name="luck">運</param>
+    /// <param name="element_defence">属性</param>
     /// <returns>ステータス構造体</returns>
     public static Status CreateStatus
     (
@@ -83,7 +85,9 @@ public class StatusManager : MonoBehaviour
         float criticalRate = 0,
         float maxSP = 0,
         int speed = 0,
-        float luck = 0
+        float luck = 0,
+        //自属性の初期値は無属性
+        Parameter.element element_defence = Parameter.element.normal
     )
     {
         var newStatus = new Status();
@@ -96,6 +100,7 @@ public class StatusManager : MonoBehaviour
         newStatus.maxSP = maxSP;
         newStatus.speed = speed;
         newStatus.luck = luck;
+        newStatus.element_defence = element_defence;
 
         // 相性倍率が未設定なら初期化
         if (Equals(congenialityRate, new CongenialityRate()))
@@ -118,12 +123,12 @@ public class StatusManager : MonoBehaviour
         var sumCong = new CongenialityRate();   // 各倍率の合算値
 
         // 各倍率を合算
-        foreach(var cong in congArray )
+        foreach (var cong in congArray)
         {
             sumCong.fire += cong.fire;
-            sumCong.water += cong.water;
             sumCong.wind += cong.wind;
             sumCong.earth += cong.earth;
+            sumCong.water += cong.water;
         }
 
         return sumCong;
@@ -151,6 +156,7 @@ public class StatusManager : MonoBehaviour
             sumStatus.speed += status.speed;
             sumStatus.luck += status.luck;
             sumStatus.congenialityRate = SumCongenialityRate(sumStatus.congenialityRate, status.congenialityRate);
+            //属性の合算は無し
         }
 
         return sumStatus;
