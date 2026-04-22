@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class AttackNanachi : MonoBehaviour
 {
-    int shortdamage = 1;
-    int longdamage = 5;
+    int shortdamage = 1;//短押しのダメージ
+    int longdamage = 5;//長押しのダメージ
     GameObject player;
     GameObject enemy;
 
@@ -101,4 +101,3 @@ public class AttackNanachi : MonoBehaviour
         }
     }
 }
-

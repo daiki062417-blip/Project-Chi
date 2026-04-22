@@ -63,6 +63,7 @@
     <Compile Include="Assets\Code\test_Main.cs" />
     <Compile Include="Assets\Code\StatusManager.cs" />
     <Compile Include="Assets\Code\AttackNanachi.cs" />
+    <Compile Include="Assets\Code\Attack2.cs" />
     <Compile Include="Assets\Code\Character.cs" />
   </ItemGroup>
   <ItemGroup>
